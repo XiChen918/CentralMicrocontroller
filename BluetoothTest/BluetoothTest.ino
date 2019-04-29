@@ -1,28 +1,49 @@
-#include "BluetoothSerial.h" //Header File for Serial Bluetooth
-#include <stdio.h>
-#include <string.h>
+#include "BluetoothSerial.h"
+ 
+BluetoothSerial SerialBT;
+int RPMArray[3] = {0,0,0};
 
-BluetoothSerial ESP_BT; //Object for Bluetooth
-char incoming;
 
+//int relayPin = 23;
+/* 
+void processReceivedValue(char command){
+ 
+  if(command == '1'){ digitalWrite(relayPin, HIGH); }
+  else if(command == '0'){ digitalWrite(relayPin, LOW);}
+ 
+   return;
+}*/
+ 
 void setup() {
-  Serial.begin(115200); 
-  ESP_BT.begin("ESP32_Fish_Tech_Inc"); //Name of your Bluetooth Signal
-  Serial.println("Bluetooth Device is Ready to Pair");
+  Serial.begin(115200);  
+//  int RPMArray[3];
+
+  if(!SerialBT.begin("ESP32")){
+    Serial.println("An error occurred initializing Bluetooth");
+  }else{
+    Serial.println("Bluetooth initialized");
+  }
 }
-
+ 
 void loop() {
-
-    if (ESP_BT.available()) {
-      incoming = ESP_BT.read(); //Read what we recevive  
-      if (incoming) {
-        Serial.print(incoming);
-      }
-        //ESP_BT.println("Hello 49022");
-      //}
-      //if (incoming == 'b') {
-        //Serial.print("Not yet");
-      //}
-      incoming = 0;
+  int ind = 0;
+  while (SerialBT.available()) {
+    
+    while (ind <= 2) {
+      char command = SerialBT.read();
+      RPMArray[ind] = command - '0';
+      ind++;
     }
+
+    int RPM = RPMArray[0] * pow(10,2) + RPMArray[1] * pow(10,1) + RPMArray[2] * pow(10,0);
+    Serial.println(RPM);
+  }
+  delay(2000);
+  SerialBT.print("Zai? KKP");
+  delay(5000);
+  SerialBT.print("NM$L");
+  delay(2000);
+  SerialBT.print("带带大师兄");
+  delay(5000);
+  
 }

@@ -17,7 +17,8 @@ void loop() {
   if (ESP_BT.available()) //Check if we receive anything from Bluetooth
   {
     incoming = ESP_BT.read(); //Read what we recevive 
-    Serial.print("Received:"); Serial.println(incoming);
+    Serial.print("Received:"); 
+    Serial.println(incoming);
     //108 KB
     if (incoming) {
       startTime = millis();
